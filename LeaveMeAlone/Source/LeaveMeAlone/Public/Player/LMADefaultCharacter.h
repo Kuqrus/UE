@@ -8,19 +8,31 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class ULMAHealthComponent;
+class UAnimMontage;
+class ULMASprintComponent;
 
 
 UCLASS()
-class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
+class ALMADefaultCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ALMADefaultCharacter();
 
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION()
+	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }
+
+	UFUNCTION(BlueprintCallable)
+	float ChangeSpeed() const;
+
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -47,13 +59,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cursor")
 	int MaxZoom = 5600;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
+	ULMAHealthComponent* HealthComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathMontage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Sprint")
+	ULMASprintComponent* SprintComponent;
+
+	
 private:
 	float YRotation = -75.0f;
 	float ArmLength = 1400.0f;
@@ -65,5 +81,13 @@ private:
 	void ZoomIn();
 	void ZoomOut();
 	void ZoomReset();
+
+	void StartSprint();
+	void StopSprint();
+	void OnStaminaChanged(float Stamina);
+
+	void OnDeath();
+	void RotationPlayerOnCursor();
+	void OnHealthChanged(float Health);
 
 };
