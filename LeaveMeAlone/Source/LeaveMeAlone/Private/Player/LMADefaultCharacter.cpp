@@ -11,6 +11,7 @@
 
 #include "Components/LMAHealthComponent.h"
 #include "Components/LMASprintComponent.h"
+#include "Weapon/LMAWeaponComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Engine/Engine.h"
 
@@ -39,6 +40,9 @@
 	HealthComponent = CreateDefaultSubobject<ULMAHealthComponent>("HealthComponent");
 	SprintComponent = CreateDefaultSubobject<ULMASprintComponent>("SprintComponent");
 
+	WeaponComponent = CreateDefaultSubobject<ULMAWeaponComponent>("Weapon");
+
+
  }
 
 
@@ -52,6 +56,11 @@
 	{
 		return 300.0f;
 	}
+ }
+
+ bool ALMADefaultCharacter::IsSprinting() const
+ {
+	return SprintComponent->IsSprinting();
  }
 
 
@@ -84,6 +93,7 @@ void ALMADefaultCharacter::Tick(float DeltaTime)
 	}
 	
 	SprintComponent->Sprint();
+	WeaponComponent->Fire();
 }
 
 // Called to bind functionality to input
@@ -100,6 +110,10 @@ void ALMADefaultCharacter::Tick(float DeltaTime)
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALMADefaultCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALMADefaultCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent, &ULMAWeaponComponent::StartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent, &ULMAWeaponComponent::StopFire);
+	PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &ULMAWeaponComponent::Reload);
 
  }
 

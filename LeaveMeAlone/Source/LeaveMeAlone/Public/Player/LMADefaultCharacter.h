@@ -11,6 +11,7 @@ class USpringArmComponent;
 class ULMAHealthComponent;
 class UAnimMontage;
 class ULMASprintComponent;
+class ULMAWeaponComponent;
 
 
 UCLASS()
@@ -30,6 +31,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float ChangeSpeed() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsSprinting() const;
 
 
 protected:
@@ -68,6 +72,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Sprint")
 	ULMASprintComponent* SprintComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	ULMAWeaponComponent* WeaponComponent;
+
 
 	
 private:
