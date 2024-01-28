@@ -120,3 +120,13 @@ void ULMAWeaponComponent::ReloadEmptyClip()
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	Character->PlayAnimMontage(ReloadMontage);
 }
+
+bool ULMAWeaponComponent::GetCurrentAmmoWeapon(FAmmoWeapon& AmmoWeapon) const
+{
+	if (IsValid(Weapon))
+	{
+		AmmoWeapon = Weapon->GetCurrentAmmoWeapon();
+		return true;
+	}
+	return false;
+}

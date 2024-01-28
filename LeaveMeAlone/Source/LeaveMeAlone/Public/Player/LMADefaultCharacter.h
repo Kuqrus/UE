@@ -35,6 +35,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsSprinting() const;
 
+	UFUNCTION(BlueprintCallable)
+	bool IsDead() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsReloading() const;
+
 
 protected:
 	virtual void BeginPlay() override;

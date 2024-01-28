@@ -7,7 +7,6 @@
 #include "LMAHealthComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnDeath)
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -23,7 +22,6 @@ public:
 	float GetHealth() const { return Health; }
 
 	FOnDeath OnDeath;
-	FOnHealthChanged OnHealthChanged;
 
 	UFUNCTION(BlueprintCallable)
 	bool IsDead() const;

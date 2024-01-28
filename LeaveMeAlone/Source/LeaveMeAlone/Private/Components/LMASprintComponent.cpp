@@ -3,6 +3,8 @@
 
 #include "Components/LMASprintComponent.h"
 #include "TimerManager.h"
+#include "Player/LMADefaultCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values for this component's properties
 ULMASprintComponent::ULMASprintComponent()
@@ -34,8 +36,7 @@ void ULMASprintComponent::Sprint()
 	}
 	else if (Sprinting)
 	{
-		Stamina--;
-		OnStaminaChanged.Broadcast(Stamina);
+		Stamina -= 0.5f;
 		StaminaRestored = false;
 	}
 	if (!Sprinting && Stamina != MaxStamina)
@@ -46,11 +47,20 @@ void ULMASprintComponent::Sprint()
 
 void ULMASprintComponent::StartSprint()
 {
-	if (Stamina - 0.1 <= 0.0f)
+	auto Player = Cast<ALMADefaultCharacter>(GetOwner());
+
+	if (IsValid(Player))
 	{
-		return;
-	}
-	Sprinting = true;		
+		FVector Speed = Player->GetCharacterMovement()->Velocity;
+		if (Speed.Length() > 0.f)
+		{
+			if (Stamina - 0.1 <= 0.0f)
+			{
+				return;
+			}
+			Sprinting = true;
+		}
+	}		
 }
 
 void ULMASprintComponent::StopSprint()
@@ -65,9 +75,6 @@ void ULMASprintComponent::RestoreStamina()
 	if (Stamina >= MaxStamina)
 	{
 		Stamina = MaxStamina;
-		OnStaminaChanged.Broadcast(Stamina);
 		return;
-	}	
-	
-	OnStaminaChanged.Broadcast(Stamina);
+	}
 }

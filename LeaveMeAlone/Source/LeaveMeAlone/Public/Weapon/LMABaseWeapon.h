@@ -41,6 +41,8 @@ public:
 	FOnClipEmpty OnClipEmpty;
 	bool IsCurrentClipFull() const;
 
+	FAmmoWeapon GetCurrentAmmoWeapon() const { return CurrentAmmoWeapon; }
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
 	USkeletalMeshComponent* WeaponComponent;

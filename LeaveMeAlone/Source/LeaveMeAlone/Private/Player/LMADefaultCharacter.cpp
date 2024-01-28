@@ -63,6 +63,16 @@
 	return SprintComponent->IsSprinting();
  }
 
+ bool ALMADefaultCharacter::IsDead() const
+ {
+	return HealthComponent->IsDead();
+ }
+
+ bool ALMADefaultCharacter::IsReloading() const
+ {
+	return WeaponComponent->AnimReloading;
+ }
+
 
  void ALMADefaultCharacter::BeginPlay()
  {
@@ -75,11 +85,6 @@
 
 	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
 
-	OnHealthChanged(HealthComponent->GetHealth());
-	HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
-
-	OnStaminaChanged(SprintComponent->GetStamina());
-	SprintComponent->OnStaminaChanged.AddUObject(this, &ALMADefaultCharacter::OnStaminaChanged);
 }
 
 // Called every frame
@@ -156,11 +161,6 @@ void ALMADefaultCharacter::StopSprint()
 	SprintComponent->StopSprint();
 }
 
-void ALMADefaultCharacter::OnStaminaChanged(float Stamina)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Stamina: %f"), Stamina));
-}
-
 
 void ALMADefaultCharacter::OnDeath()
 {
@@ -188,9 +188,4 @@ void ALMADefaultCharacter::RotationPlayerOnCursor()
 			CurrentCursor->SetWorldLocation(ResultHit.Location);
 		}
 	}
-}
-
-void ALMADefaultCharacter::OnHealthChanged(float Health)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health: %f"), Health));
 }

@@ -6,8 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "LMASprintComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnStaminaChanged, float);
-
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LEAVEMEALONE_API ULMASprintComponent : public UActorComponent
@@ -20,6 +18,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	bool IsSprinting() const { return Sprinting; }
+
+	UFUNCTION(BlueprintCallable)
 	float GetStamina() const { return Stamina; }
 	
 	void Sprint();
@@ -27,15 +27,13 @@ public:
 	void StopSprint();
 	void RestoreStamina();
 
-	FOnStaminaChanged OnStaminaChanged;
-
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxStamina = 100.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float RestoreDelay = 5.0f;
 
 private:

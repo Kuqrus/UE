@@ -8,6 +8,7 @@
 
 class ALMABaseWeapon;
 class UAnimMontage;
+struct FAmmoWeapon;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class LEAVEMEALONE_API ULMAWeaponComponent : public UActorComponent
@@ -19,10 +20,16 @@ public:
 
 	void Fire();
 	void StartFire();
+	UFUNCTION(BlueprintCallable)
 	void StopFire();
 
 	void Reload();
 	void ReloadEmptyClip();
+
+	UFUNCTION(BlueprintCallable)
+	bool GetCurrentAmmoWeapon(FAmmoWeapon& AmmoWeapon) const;
+
+	bool AnimReloading = false;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -30,6 +37,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	UAnimMontage* ReloadMontage;
+	
 
 	virtual void BeginPlay() override;
 
@@ -40,7 +48,7 @@ private:
 	UPROPERTY()
 	ALMABaseWeapon* Weapon = nullptr;
 
-	bool AnimReloading = false;
+	//bool AnimReloading = false;
 
 	bool IsFiring = false;
 
