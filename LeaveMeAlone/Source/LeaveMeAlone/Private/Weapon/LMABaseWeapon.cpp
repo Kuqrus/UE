@@ -2,6 +2,7 @@
 
 #include "Weapon/LMABaseWeapon.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeapon, All, All);
 
@@ -40,6 +41,12 @@ void ALMABaseWeapon::Shoot()
 	{
 		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 5.0f, 24, FColor::Red, false, 1.0f);
 	}
+	if (HitResult.bBlockingHit)
+	{
+		MakeDamage(HitResult);
+		//TraceEnd = HitResult.ImpactPoint;
+	}
+
 
 	DecrementBullets();	
 }
@@ -68,6 +75,23 @@ bool ALMABaseWeapon::IsCurrentClipFull() const
 void ALMABaseWeapon::ChangeClip()
 {
 	CurrentAmmoWeapon.Bullets = AmmoWeapon.Bullets;
+}
+
+void ALMABaseWeapon::MakeDamage(const FHitResult& HitResult)
+{
+	const auto Zombie = HitResult.GetActor();
+	if (!IsValid(Zombie))
+		return;
+
+	const auto Pawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (!IsValid(Pawn))
+		return;
+
+	const auto Controller = Pawn->GetController<APlayerController>();
+	if (!IsValid(Controller))
+		return;
+
+	Zombie->TakeDamage(damage, FDamageEvent(), Controller, this);
 }
 
 void ALMABaseWeapon::Tick(float DeltaTime)

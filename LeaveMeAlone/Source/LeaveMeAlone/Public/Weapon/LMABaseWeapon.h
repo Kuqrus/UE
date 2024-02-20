@@ -62,6 +62,12 @@ protected:
 
 	void DecrementBullets();
 	bool IsCurrentClipEmpty() const;
+
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	float damage = 20;
+
+	void MakeDamage(const FHitResult& HitResult);
 	
 
 public:
